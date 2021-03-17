@@ -1,8 +1,10 @@
 
 # 2d-physics-simulation
 
-2Dの簡易物理エンジンです。  
-[こちら (GitHub Pages)](https://kazuya-hub.github.io/2d-physics-simulation/) で動作デモを公開しています。
+2Dの簡易物理エンジンです。
+
+<a href="https://kazuya-hub.github.io/2d-physics-simulation/)" target="_blank">こちら (GitHub Pages)</a>
+で動作デモを公開しています。
 
 ## 操作方法
 

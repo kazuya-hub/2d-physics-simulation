@@ -413,6 +413,39 @@
         }
     }
 
+    /**
+     * x軸に平行な2つの辺とy軸に平行な2つの辺で構成され、  
+     * 範囲内におけるX座標とY座標の最小値・最大値によって表現される矩形
+     */
+    class AABB {
+        /**
+         * 
+         * @param {number} minX x座標の最小値 
+         * @param {number} minY y座標の最小値 
+         * @param {number} maxX x座標の最大値 
+         * @param {number} maxY y座標の最大値 
+         */
+        constructor(minX, minY, maxX, maxY) {
+            this.minX = minX;
+            this.minY = minY;
+            this.maxX = maxX;
+            this.maxY = maxY;
+        }
+
+        /**
+         * 2つのAABB同士が共有点を持つか否かを返す
+         * @param {AABB} b1 
+         * @param {AABB} b2 
+         */
+        static isCollided(b1, b2) {
+            if (b1.maxX < b2.minX) return false;
+            if (b2.maxX < b1.minX) return false;
+            if (b1.maxY < b2.minY) return false;
+            if (b2.maxY < b1.minY) return false;
+            return true;
+        }
+    }
+
 
 
     class CanvasManager {

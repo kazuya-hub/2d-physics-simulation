@@ -236,6 +236,13 @@
                         const o1 = this.objects[i];
                         const o2 = this.objects[k];
 
+                        const o1AABB = o1.getAABB();
+                        if (o1AABB === null) continue;
+                        const o2AABB = o2.getAABB();
+                        if (o2AABB === null) continue;
+
+                        if (AABB.isCollided(o1AABB, o2AABB) === false) continue;
+
                         if (
                             (o1 instanceof CircleObject) &&
                             (o2 instanceof CircleObject)
@@ -313,6 +320,14 @@
         move(displacement) {
             this.coord.add(displacement);
         }
+
+        /**
+         * オブジェクトのAABBを返す　定義されていない場合はnullを返す
+         * @returns {?AABB}
+         */
+        getAABB() {
+            return null;
+        }
     }
 
     class CircleObject extends PhysicalObject {
@@ -320,6 +335,14 @@
             super(configs);
 
             this.radius = configs.radius;
+        }
+
+        getAABB() {
+            const minX = this.coord.x - this.radius;
+            const minY = this.coord.y - this.radius;
+            const maxX = this.coord.x + this.radius;
+            const maxY = this.coord.y + this.radius;
+            return new AABB(minX, minY, maxX, maxY);
         }
 
         /**
@@ -515,8 +538,18 @@
     }
 
     function updateCanvas() {
+
+        const canvasAABB = world.canvasManager.canvasAABB();
+
         world.canvasManager.clearCanvas();
-        world.objects.forEach(drawObject);
+        world.objects.forEach(o => {
+
+            const objectAABB = o.getAABB();
+            if (objectAABB === null) return;
+            if (AABB.isCollided(canvasAABB, objectAABB) === false) return;
+
+            drawObject(o);
+        });
     }
 
 

@@ -474,6 +474,10 @@
         clearCanvas() {
             this.ctx.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
         }
+
+        canvasAABB() {
+            return new AABB(0, 0, this.canvasElement.width, this.canvasElement.height);
+        }
     }
 
 

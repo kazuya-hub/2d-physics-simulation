@@ -598,7 +598,7 @@
         const newCircleObject = new CircleObject({
             coord: cursorCoord,
             velocity: new Vector(0, 0),
-            radius: CIRCLE_RADIUS_IN_PIXEL
+            radius: Math.random() * CIRCLE_RADIUS_IN_PIXEL + CIRCLE_RADIUS_IN_PIXEL * 0.5
         });
         world.objects.push(newCircleObject);
     });
@@ -606,7 +606,7 @@
     window.requestAnimationFrame(loopStep);
 
     (async () => {
-        // return
+        return
         // CircleObjectをランダムに出現させる
         while (true) {
             const initVX =

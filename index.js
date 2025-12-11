@@ -378,6 +378,8 @@
          */
         resolveCollisionWithCircle(circleObject) {
 
+            const COR = Number(corSlider.value); // 反発係数
+
             // --- 衝突の解決に必要な情報を取得する処理 ---
 
             /** @type {Vector} 相手の中心点から見た、自分の中心点までの相対座標 */
@@ -517,6 +519,15 @@
         canvas.height = canvas.clientHeight;
     })).observe(canvas);
 
+    /** @type {HTMLInputElement} checkbox */
+    const randomSpawnToggle = document.getElementById('random-spawn-toggle');
+
+    /** @type {HTMLInputElement} checkbox */
+    const pullBackToggle = document.getElementById('pull-back-toggle');
+
+    /** @type {HTMLInputElement} range */
+    const corSlider = document.getElementById('cor-slider');
+
     const world = new World(canvas);
 
     const circleObject = new CircleObject({
@@ -583,12 +594,14 @@
             }
 
             // 画面外のオブジェクトを引き戻す
-            // if (object.coord.x < 0) {
-            //     object.accelerate(new Vector(3, 0));
-            // }
-            // if (object.coord.x > world.canvasManager.canvasElement.width) {
-            //     object.accelerate(new Vector(-3, 0));
-            // }
+            if (pullBackToggle.checked) {
+                if (object.coord.x < 0) {
+                    object.accelerate(new Vector(3, 0));
+                }
+                if (object.coord.x > world.canvasManager.canvasElement.width) {
+                    object.accelerate(new Vector(-3, 0));
+                }
+            }
         });
 
         // await new Promise((resolve, reject) => { setTimeout(resolve, 100) });
@@ -610,23 +623,24 @@
     window.requestAnimationFrame(loopStep);
 
     (async () => {
-        return
         // CircleObjectをランダムに出現させる
         while (true) {
-            const initVX =
-                (function () {
-                    const speed = (Math.random() * 500 + 50);
-                    const sign = ((Math.floor(Math.random() * 10) % 2) ? -1 : 1);
-                    return speed * sign;
-                })();
-            const circleObject = new CircleObject({
-                coord: new Vector(Math.random() * 800, Math.random() * 600),
-                velocity: new Vector(
-                    initVX,
-                    Math.random() * 5000 - 2500),
-                radius: CIRCLE_RADIUS_IN_PIXEL * (0.5 + Math.random())
-            });
-            world.objects.push(circleObject);
+            if (randomSpawnToggle.checked) {
+                const initVX =
+                    (function () {
+                        const speed = (Math.random() * 500 + 50);
+                        const sign = ((Math.floor(Math.random() * 10) % 2) ? -1 : 1);
+                        return speed * sign;
+                    })();
+                const circleObject = new CircleObject({
+                    coord: new Vector(Math.random() * 800, Math.random() * 600),
+                    velocity: new Vector(
+                        initVX,
+                        Math.random() * 5000 - 2500),
+                    radius: CIRCLE_RADIUS_IN_PIXEL * (0.5 + Math.random())
+                });
+                world.objects.push(circleObject);
+            }
             await new Promise((resolve, reject) => { setInterval(resolve, 250) });
         }
     })();

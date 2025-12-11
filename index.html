@@ -8,6 +8,23 @@
 </head>
 
 <body>
+    <h1>2D物理演算シミュレーション</h1>
+    操作: 枠内をクリックして球を生成
+    <h2>コンフィグ</h2>
+    <div>
+        <span>
+            <input type="checkbox" id="random-spawn-toggle" checked>
+            <label for="random-spawn-toggle">球を自動生成</label>
+        </span>
+    </div>
+    <div>
+        <input type="checkbox" id="pull-back-toggle">
+        <label for="pull-back-toggle">画面外の球を引き戻す</label>
+    </div>
+    <div>
+        <label for="cor-slider">反発係数 (0.0 ~ 1.0): </label>
+        <input type="range" id="cor-slider" min="0" max="1" step="0.01" value="0.8">
+    </div>
     <canvas id="canvas"></canvas>
     <script src="./index.js"></script>
 </body>

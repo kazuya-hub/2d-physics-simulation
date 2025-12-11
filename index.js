@@ -512,6 +512,10 @@
 
     /** @type {HTMLCanvasElement} */
     const canvas = document.getElementById('canvas');
+    (new ResizeObserver(() => {
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
+    })).observe(canvas);
 
     const world = new World(canvas);
 

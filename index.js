@@ -20,6 +20,9 @@
     /** @type {number} 重力加速度の大きさ */
     const G = meterToPixel(9.8);
 
+    /** @type {number} 反発係数 (一律) */
+    const COR = 0.8;
+
     const FPS = 60;
 
 
@@ -335,6 +338,7 @@
             super(configs);
 
             this.radius = configs.radius;
+            this.mass = Math.PI * Math.pow(this.radius, 2); // 密度1
         }
 
         getAABB() {
@@ -422,17 +426,18 @@
                 Vector.multiplied(normalUnitVector, collisionDepth * -0.5)
             );
 
-            // 速度の法線成分を交換する
-            this.velocity =
-                Vector.added(
-                    tangentComponentOfV1,
-                    Vector.multiplied(normalComponentOfV2, 1)
-                );
-            circleObject.velocity =
-                Vector.added(
-                    tangentComponentOfV2,
-                    Vector.multiplied(normalComponentOfV1, 1)
-                );
+            // 速度の法線成分だけを、反発係数の定義と運動量保存則から導かれる式で更新
+            const newNormalComponentOfV1 = Vector.added(
+                Vector.multiplied(normalComponentOfV1, (this.mass - COR * circleObject.mass) / (this.mass + circleObject.mass)),
+                Vector.multiplied(normalComponentOfV2, (1 + COR) * circleObject.mass / (this.mass + circleObject.mass))
+            );
+            const newNormalComponentOfV2 = Vector.added(
+                Vector.multiplied(normalComponentOfV1, (1 + COR) * this.mass / (this.mass + circleObject.mass)),
+                Vector.multiplied(normalComponentOfV2, (circleObject.mass - COR * this.mass) / (this.mass + circleObject.mass))
+            );
+
+            this.velocity = Vector.added(tangentComponentOfV1, newNormalComponentOfV1);
+            circleObject.velocity = Vector.added(tangentComponentOfV2, newNormalComponentOfV2);
         }
     }
 
